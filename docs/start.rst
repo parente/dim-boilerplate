@@ -13,7 +13,7 @@ The dim-boilerplate projects provides the following features out-of-the-box:
 #. Visual backgrounds and text descriptions.
 #. Aural text-to-speech synthesis, voice actor narration, sound effects, music, and ambiance.
 
-Keep in mind that the project is a template for writing adventure games, not a strict framework or engine. You should drop, replace, extend, or otherwise hack any of the included components according to suit your needs.
+Keep in mind that the project is a template for writing adventure games, not a strict framework or engine. You should drop, replace, extend, or otherwise hack any of the included components to suit your needs.
 
 Clone the Boilerplate
 ---------------------
