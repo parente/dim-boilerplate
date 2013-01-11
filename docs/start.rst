@@ -1,0 +1,83 @@
+Getting Started
+===============
+
+Understand the Capabilities
+---------------------------
+
+The dim-boilerplate projects provides the following features out-of-the-box:
+
+#. Declarative JSON markup for defining game world scenes, items, and events.
+#. Exploration of the game world via arrow key or gesture-driven menus.
+#. Game world interactions including examining, moving, taking, and using.
+#. Game world puzzles involving sequencing and timed reactions.
+#. Visual backgrounds and text descriptions.
+#. Aural text-to-speech synthesis, voice actor narration, sound effects, music, and ambiance.
+
+Keep in mind that the project is a template for writing adventure games, not a strict framework or engine. You should drop, replace, extend, or otherwise hack any of the included components according to suit your needs.
+
+Clone the Boilerplate
+---------------------
+
+The boilerplate project is available on GitHub. Clone it with the following command:
+
+.. code-block:: bash
+
+    git clone git://github.com/parente/dim-boilerplate.git
+
+Understand the Contents
+-----------------------
+
+The boilerplate project has the following general layout (not all files are shown)::
+
+    .
+    ├── docs/                        # source for this documentation
+    ├── dev/                         # development and deployment scripts
+    └── webapp/
+        ├── css/                     # game visual stylesheets
+        ├── data/                    # game world assets
+        │   └── world.jso n          # game world definition
+        ├── favicon.ico              # game browser bar icon
+        ├── img/                     # game iOS startup and touch icons
+        ├── index.html
+        ├── js/                      # game engine
+        │   ├── dim/
+        │   │   ├── aural/
+        │   │   ├── controllers/     # game interaction controllers
+        │   │   ├── events.js
+        │   │   ├── input.js
+        │   │   ├── main.js
+        │   │   ├── pump.js
+        │   │   ├── topic.js
+        │   │   ├── visual.js
+        │   │   └── world.js
+        │   └── vendor/              # dependencies
+        └── robots.txt
+
+
+Setup for Development
+---------------------
+
+Push the boilerplate into a new git repository where you will build your game. Alternatively, copy at least the dev and webapp folders to a new directory in the version control system of your choice.
+
+The boilerplate has no web server-side requirements. You can simply put the webapp folder in a web accessible directory (e.g., ~/Sites on OS X, ~/public_html on Linux) and visit the index.html page in a browser. As you make build-out your game, you can simply refresh your browser to immediately see the impact of your changes.
+
+Currently, the boilerplate supports the following browsers:
+
+#. Chrome on any platform
+#. OS X Safari 6.x
+
+.. note:: Ultimately, the boilerplate should be compatible with any browser that supports the `Web Audio API`_.
+
+Build Your Game
+---------------
+
+
+
+Deploy Your Game
+----------------
+
+Contribute to the Boilerplate
+-----------------------------
+
+.. _Descent Into Madness: http://github.com/parente/dim-game
+.. _Web Audio API: http://caniuse.com/#feat=audio-api
