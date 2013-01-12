@@ -1,5 +1,5 @@
-Level 2: Coding New Controllers
-===============================
+Level 2: Code New Controllers
+=============================
 
 Lifecyle
 --------

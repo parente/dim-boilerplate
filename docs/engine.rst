@@ -1,5 +1,5 @@
-Level 3: Extending the Engine
-=============================
+Level 3: Extend the Engine
+==========================
 
 MVC Breakdown
 -------------

@@ -1,10 +1,10 @@
-Getting Started
-===============
+Get Started
+===========
 
 Understand the Capabilities
 ---------------------------
 
-The dim-boilerplate projects provides the following features out-of-the-box:
+The dim-boilerplate project provides the following features out-of-the-box:
 
 #. Declarative JSON markup for defining game world scenes, items, and events.
 #. Exploration of the game world via arrow key or gesture-driven menus.
@@ -66,18 +66,24 @@ Currently, the boilerplate supports the following browsers:
 #. Chrome on any platform
 #. OS X Safari 6.x
 
-.. note:: Ultimately, the boilerplate should be compatible with any browser that supports the `Web Audio API`_.
+.. note:: Ultimately, the boilerplate should be compatible with any browser that supports the HTML5 `Web Audio API`_.
 
 Build Your Game
 ---------------
 
+Draft the storyline of your adventure game. Then try to answer these questions.
 
+#. What is the goal of the game?
+#. What locations will the player visit?
+#. What other people and things exist in the world?
+#. What interactions will the player have?
+#. What challenges will the player face?
 
-Deploy Your Game
-----------------
+Now modify the boilerplate to implement your game ideas. Work through the following levels of modification in the order given, only continuing to higher levels if you cannot accomplish what you need in a lower level.
 
-Contribute to the Boilerplate
------------------------------
+* :doc:`Level 1 <declare>` - Define your game scenes, items, and events in the game world JSON file using text, sounds, speech, and images.
+* :doc:`Level 2 <code>` - Create new JavaScript controllers to enable new user actions within the game world.
+* :doc:`Level 3 <engine>` - Modify the input capture, aural rendering, and visual rendering JavaScript code to support new means of interaction with the user.
 
 .. _Descent Into Madness: http://github.com/parente/dim-game
 .. _Web Audio API: http://caniuse.com/#feat=audio-api

@@ -1,5 +1,5 @@
-Level 1: Defining The World
-===========================
+Level 1: Define the World
+=========================
 
 The World JSON
 --------------

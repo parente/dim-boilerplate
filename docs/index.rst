@@ -13,5 +13,6 @@ Contents:
    declare
    code
    engine
+   end
 
 .. _Descent Into Madness: http://github.com/parente/dim-game
