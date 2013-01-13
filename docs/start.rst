@@ -35,7 +35,7 @@ The boilerplate project has the following general layout (not all files are show
     └── webapp/
         ├── css/                     # game visual stylesheets
         ├── data/                    # game world assets
-        │   └── world.jso n          # game world definition
+        │   └── world.json           # game world definition
         ├── favicon.ico              # game browser bar icon
         ├── img/                     # game iOS startup and touch icons
         ├── index.html
