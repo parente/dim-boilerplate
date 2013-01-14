@@ -84,7 +84,8 @@ If the scene does not define a controller, the one specified in the :ref:`defaul
 Items
 ~~~~~
 
-An item object describes a
+An item object describes an inanimate object in the game world. An item may have zero or more properties. An item may have visual and aural properties describing how to appears to the player. The world array may contain any number of items.
+
 
 .. code-block:: javascript
 
@@ -102,35 +103,55 @@ An item object describes a
         "properties": ["useable"]
     }
 
+:doc:`Controllers <code>` give meaning to item properties. They have no impact on the game world on their own.
+
 Events
 ~~~~~~
+
+An event object describes changes made to the game world upon some player interaction with the world and how those changes are reported to the player. An event has three main properties:
+
+#. *on*, an array of strings which state when the event fires
+#. *exec*, an array of actions which change the state of the game world when the event fires
+#. *report*, an array of visual and aural information to report to the player about the event
+
+For example, the following example event fires when the player uses the stove. When it fires, it disables the event from firing again and enables the *panToStove* action. It also changes the description of the *stove* object to explain that the stove is now lit. Finally, the event object visually describes what happens when the player uses the stove and narrates it as well.
 
 .. code-block:: javascript
 
     {
         "type": "event",
         "id": "lightStove",
+        /* conditions for triggering this event */
         "on": [
             "use",
             "stove"
         ],
+        /* actions to take on the game world state when the event fires */
         "exec": [
             {
+                /* sets a property arg0 to value arg1 */
                 "action": "set",
+                /* here, set the event.lightStove.disabled to true */
                 "args": [
                     "event.lightStove.disabled",
                     true
-                ],
+                ]
+            },
+            {
                 "action": "set",
                 "args": [
                     "event.panToStove.disabled",
                     false
-                ],
+                ]
+            },
+            {
                 "action": "set",
                 "args": [
                     "item.stove.visual.description",
                     "The gas stove is hot and ready to cook."
-                ],
+                ]
+            },
+            {
                 "action": "set",
                 "args": [
                     "item.stove.aural.description",
@@ -138,6 +159,7 @@ Events
                 ]
             }
         ],
+        /* report to give after making the changes to the world */
         "report": [
             {
                 "description": "You light the stove.",
@@ -146,6 +168,66 @@ Events
         ]
     }
 
+The ability of events to affect the game world is limitless. The flexibility of the *on*, *exec*, and *report* properties make this possible. The next sections describe these properties in more detail.
+
+On - Event Triggers
+###################
+
+The *on* array supports any number of strings of any value. All but two reserved strings are meaningless on their own. The rest are given meaning by the :doc:`game controllers <code>`.
+
+Upon certain user interactions (e.g., taking an item, examining a scene, shooting a bad guy), a controller may ask the game world to evaluate its events to see if one matches an array of strings provided by the controller. The world returns any event object that has an *on* array matching the controller's array of strings. The controller may then fire any of the returned events.
+
+For example, if a controller does the following:
+
+.. code-block:: javascript
+
+    var events = world.evaluate('use', 'stove');
+    events.fires();
+
+the event defined above will fire.
+
+Two strings have special meaning in the *on* array. A single star, *, matches any single string element in a controller provided array. For instance, if the world.json includes this event:
+
+.. code-block:: javascript
+
+    {
+        "type": "event",
+        "on": ["use", "*"]
+    }
+
+then it will match the first two controller calls below, but not the third:
+
+.. code-block:: javascript
+
+    world.evaluate('use', 'stove');
+    world.evaluate('use', 'sink');
+    world.evaluate('use', 'dishwasher', 'quickly');
+
+Two stars, **, at the end of the *on* array match any number of string elements. For instance, if the world.json includes this event:
+
+.. code-block:: javascript
+
+    {
+        "type": "event",
+        "on": ["use", "**"]
+    }
+
+then it will match all three controller calls in the example above.
+
+.. note::
+
+    The boilerplate has controllers supporting the following triggers. If you want to implement support other triggers, see the :doc:`controllers <code>` section.
+
+    * ["use", "<item id>"]
+    * ["use", "<item id>", "<other item id>"]
+    * ["move", "<scene id>"]
+    * ["examine", "<item or scene id>"]
+    * ["take", "<item id w/ takeable property>"]
+
+Exec - Event Consequences
+#########################
+
+The *exec* array supports a variety of actions that modify the game world when the event fires.
 
 .. code-block:: javascript
 
@@ -180,6 +262,9 @@ Events
             }
         ]
     }
+
+Report - Event Explainations
+############################
 
 
 .. _defaults:
