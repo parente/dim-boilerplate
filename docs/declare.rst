@@ -231,6 +231,20 @@ The *exec* array supports a variety of actions that modify the game world when t
 
 .. note:: The following sections define the actions as functions. In practice, they are used declaratively in the world JSON.
 
+.. js:function:: activate(controller_module, arg1, arg2, ...)
+
+    The activate action transfers input handling to another controller from the current one.
+
+    :param string controller_module: AMD path of the controller module (see example)
+    :param any args: Optional arguments to pass to the controller's initialize function
+
+    .. code-block:: javascript
+
+        {
+            "action": "activate",
+            "args": ["dim/controllers/puzzle/omlette", "eggs", "cheese"]
+        }
+
 .. js:function:: append(target_ref, value)
 
     The append action adds a value to the end of an array declared in the world JSON.
@@ -262,23 +276,9 @@ The *exec* array supports a variety of actions that modify the game world when t
             "args": ["event.panToStove.exec"]
         }
 
-
-.. js:function:: publish(topic, arg1, arg2, ...)
-
-    :param string topic:
-    :param any args:
-
-    .. code-block:: javascript
-
-        {
-            "action": "publish",
-            "args": [
-                "controller.request",
-                "dim/controllers/puzzle/omlette"
-            ]
-        }
-
 .. js:function:: remove(target_ref, value)
+
+    The remove action deletes a value from an array of values declared in the world JSON.
 
     :param string target_ref: Name of the target array, referenced by its *type.id.property*
     :param any value: Value to remove from the target array
@@ -292,6 +292,8 @@ The *exec* array supports a variety of actions that modify the game world when t
 
 .. js:function:: set(target_ref, value)
 
+    The set action stores a value in a property declared in the world JSON.
+
     :param string target_ref: Name of the target property, referenced by its *type.id.property*
     :param any value: Value to set for the property
 
@@ -302,14 +304,26 @@ The *exec* array supports a variety of actions that modify the game world when t
             "args": ["item.pan.visual.description", "The pan is blazing hot!"]
         }
 
+Report - Event Explainations
+############################
 
-TODO: explain complex example using templates
+TODO
+
+Templates
+#########
+
+All of the *exec* and *report* examples given so far use fixed references and values. None of them vary based on the game state. Though simple and common, these action arguments are limiting and do not scale well. For instance, to allow the use of a *pot*, a *pan*, or *wok* on the *stove* requires three separate event objects when using hardcoded strings alone.
+
+The special *on* array arguments, \* and \*\*, noted earlier provide a foundation for solving this problem. Recall that these arguments match arbitrary strings provided by controllers. If the controller provides a game world object with an ID when evaluating an event, the world looks for matching event objects using that ID. Meanwhile, it retains a reference to the entire object for use in evaluating the other event fields of matched events. Templates used in these other fields can reference properties from the matched object to dynamically customize the *exec* and *report*.
+
+For instance, consider this event which allows the player to use any item with the *stove*. Various *exec* and *report* fields in this event have templates refering to the object matched by the \* in the *on* array. These templates allow this single event object to handle the use of a *pot*, *pan*, *wok*, or any other item a controller cares to interface with the *stove*.
 
 .. code-block:: javascript
 
     {
         "type": "event",
         "id": "itemToStove",
+        /* use X with the stove, where X is an item provided by a controller */
         "on": [
             "use",
             "*",
@@ -320,6 +334,7 @@ TODO: explain complex example using templates
                 "action": "remove",
                 "args": [
                     "player.items",
+                    /* template referring to the on[1] matched object's id */
                     "{{{args.1.id}}}"
                 ]
             },
@@ -327,12 +342,14 @@ TODO: explain complex example using templates
                 "action": "append",
                 "args": [
                     "scene.kitchen.items",
+                    /* template referring to the on[1] matched object's id */
                     "{{{args.1.id}}}"
                 ]
             },
             {
                 "action": "append",
                 "args": [
+                    /* template referring to the on[1] matched object's id */
                     "item.{{{args.1.id}}}.properties",
                     "hot"
                 ]
@@ -340,17 +357,21 @@ TODO: explain complex example using templates
         ],
         "report": [
             {
+                /* template referring to the on[1] matched object's visual name */
                 "description": "You place the {{args.1.visual.name}} on the hot stove.",
+                /* template referring to the on[1] matched object's id */
                 "narration": "sound://speech/{{{args.1.id}}}ToStove"
             }
         ]
     }
 
-Report - Event Explainations
-############################
+In general, event templates follow the format below::
 
-TODO
+    {{{args.indexOfOnArrayElement.any.number.of.sub.properties}}}
 
+where *indexOfOnArrayElement* is an integer and the following properties are dependent on the contents of the matched object. When template output will appear on the screen (e.g., in a visual report), use two curly braces ({{ }}) instead of three ({{{ }}}) to properly escape HTML characters.
+
+.. note:: For the curious, the dim-boilerplate uses the `mustache templating library <http://mustache.github.com/>`_ to render templates. Any mustache syntax should work, but keep security in mind if you are crafting a game with private player data and user manipulable templates.
 
 .. _defaults:
 
