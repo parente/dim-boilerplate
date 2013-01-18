@@ -108,7 +108,9 @@ An item object describes an inanimate object in the game world. An item may have
 Events
 ~~~~~~
 
-An event object describes changes made to the game world upon some player interaction with the world and how those changes are reported to the player. An event has three main properties:
+An event object describes changes made to the game world upon some player interaction with the world. It also describes how to report those changes to the player. The world array may contain zero or more events.
+
+An event has three main properties:
 
 #. *on*, an array of strings which state when the event fires
 #. *exec*, an array of actions which change the state of the game world when the event fires
@@ -307,7 +309,44 @@ The *exec* array supports a variety of actions that modify the game world when t
 Report - Event Explainations
 ############################
 
-TODO
+The *report* array contains the information to report to the player when the event fires. The array consists of zero or more objects to be reported in sequence. The objects have keys representing output *channels* paired with the values to report on those channels. The channels are declared and configured world JSON (see :ref:`Defaults`). The boilerplate defines the following by default:
+
+title
+    Text shown at the top of the default game UI
+
+description
+    Text shown in the center of the default game UI
+
+backdrop
+    Image rendered in the background of the default game UI
+
+narration
+    Speech reported on an audio channel of the default game UI
+
+sound
+    Sound played on an audio channel of the default game UI
+
+ambience
+    Repeating sound or music played on an audio channel of the default game UI
+
+For example, the following report shows and narrates the event of putting eggs in the pan on the stove. While the narration describes the eggs cooking, a short sound of sizzling eggs plays. After the visual description appears, and the narration and sound conclude, the report plays a second short sound of eggs sizzling more loudly.
+
+.. code-block:: javascript
+
+    [
+        {
+            "description": "The eggs start to cook.",
+            "narration": "sound://speech/eggsCook",
+            "sound": "sound://sound/eggsCook"
+        },
+        {
+            "sound": "sound://sound/eggsCookMore"
+        }
+    ]
+
+Any fields ommitted from the report are left unchanged. For example, if the visual *title* was previously set to "Kitchen" by an earlier report, it remains untouched as "Kitchen" when this event fires.
+
+The user input event may interrupt the current report in progress. When this happens, all other pending reports (e.g., the second object in the example array above) are also skipped to allow a report about the latest user action to start immediately. Typically, interruptions only impact aural channels as visual channels complete their reports almost immediately (i.e., they appear on the screen).
 
 Templates
 #########
@@ -378,7 +417,9 @@ where *indexOfOnArrayElement* is an integer and the following properties are dep
 Defaults
 ~~~~~~~~
 
-TODO
+The default object includes configuration information used by the :doc:`controllers <code>` and :doc:`views <engine>` included in the boilerplate. Its keys and values are completely open-ended: you may add whatever fields you need to support your customizations to the boilerplate. There may be one and only one default object in the world array.
+
+The following is the default object as shipped in the boilerplate:
 
 .. code-block:: javascript
 
@@ -442,6 +483,8 @@ TODO
             }
         }
     }
+
+.. note:: You can define additional aural and visual channels in the defaults. New aural channels will output speech and sound if used in reports. New visual channels, however, require changes to the :doc:`visual view <engine>` to place their output on screen.
 
 Controller Resources
 ~~~~~~~~~~~~~~~~~~~~
