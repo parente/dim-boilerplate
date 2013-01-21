@@ -240,11 +240,13 @@ The *exec* array supports a variety of actions that modify the game world when t
     :param string controller_module: AMD path of the controller module (see example)
     :param any args: Optional arguments to pass to the controller's initialize function
 
+    For example, the following action activate the *cook* controller providing it with the arguments *eggs* and *cheese*.
+
     .. code-block:: javascript
 
         {
             "action": "activate",
-            "args": ["dim/controllers/puzzle/omlette", "eggs", "cheese"]
+            "args": ["dim/controllers/puzzle/cook", "eggs", "cheese"]
         }
 
 .. js:function:: append(target_ref, value)
@@ -285,6 +287,9 @@ The *exec* array supports a variety of actions that modify the game world when t
     :param string target_ref: Name of the target array, referenced by its *type.id.property*
     :param any value: Value to remove from the target array
 
+    For example, the following action removes the item with the ID *pan* from the *cupboard* scene.
+
+
     .. code-block:: javascript
 
         {
@@ -298,6 +303,8 @@ The *exec* array supports a variety of actions that modify the game world when t
 
     :param string target_ref: Name of the target property, referenced by its *type.id.property*
     :param any value: Value to set for the property
+
+    For example, the following action changes the visual description of the *pan* item to state that the pan is hot.
 
     .. code-block:: javascript
 
@@ -351,9 +358,9 @@ The user input event may interrupt the current report in progress. When this hap
 Templates
 #########
 
-All of the *exec* and *report* examples given so far use fixed references and values. None of them vary based on the game state. Though simple and common, these action arguments are limiting and do not scale well. For instance, to allow the use of a *pot*, a *pan*, or *wok* on the *stove* requires three separate event objects when using hardcoded strings alone.
+All of the *exec* and *report* examples given so far use fixed references and values. None of them vary based on the game state. Though simple and common, these action arguments are limiting and do not scale well. For instance, the use of a *pot*, a *pan*, or a *wok* on the *stove* requires three separate event objects when using hardcoded strings alone.
 
-The special *on* array arguments, \* and \*\*, noted earlier provide a foundation for solving this problem. Recall that these arguments match arbitrary strings provided by controllers. If the controller provides a game world object with an ID when evaluating an event, the world looks for matching event objects using that ID. Meanwhile, it retains a reference to the entire object for use in evaluating the other event fields of matched events. Templates used in these other fields can reference properties from the matched object to dynamically customize the *exec* and *report*.
+The special *on* array arguments \* and \*\* provide a foundation for solving this problem. Recall that these arguments match arbitrary strings provided by controllers. If a controller provides a game world object in place of a string, the object's string ID is used to match events. If a match occurs, the event is able to reference any game world object that participated in the match. *Templates* in the event *exec* and *report* fields can include values read from matched objects, customizing the event output and actions based on the arguments provided.
 
 For instance, consider this event which allows the player to use any item with the *stove*. Various *exec* and *report* fields in this event have templates refering to the object matched by the \* in the *on* array. These templates allow this single event object to handle the use of a *pot*, *pan*, *wok*, or any other item a controller cares to interface with the *stove*.
 
@@ -414,8 +421,8 @@ where *indexOfOnArrayElement* is an integer and the following properties are dep
 
 .. _defaults:
 
-Defaults
-~~~~~~~~
+Default
+~~~~~~~
 
 The default object includes configuration information used by the :doc:`controllers <code>` and :doc:`views <engine>` included in the boilerplate. Its keys and values are completely open-ended: you may add whatever fields you need to support your customizations to the boilerplate. There may be one and only one default object in the world array.
 
@@ -489,7 +496,9 @@ The following is the default object as shipped in the boilerplate:
 Controller Resources
 ~~~~~~~~~~~~~~~~~~~~
 
-TODO
+The final type of object supported in the world array holds information for use by controllers. These objects with type *ctrl* may contain arbitrary properties: whatever the controller needs to function. The world array may contain zero or more controller objects.
+
+For example, a game event might activate an end-of-game controller when the player wins or loses. The event might pass the ID of a *ctrl* object which the controller might reference in making its report of the player's win or loss.
 
 .. code-block:: javascript
 
@@ -506,7 +515,7 @@ TODO
 Media Assets
 ------------
 
-TODO
+Objects in the world array may reference external, non-text media assets such as sounds and images. Many of the examples above include media URIs
 
 .. _media-sounds:
 
@@ -520,7 +529,7 @@ Images
 
 TODO
 
-Styles
-~~~~~~
+Stylesheets
+-----------
 
 TODO
