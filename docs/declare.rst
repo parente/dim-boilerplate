@@ -515,21 +515,34 @@ For example, a game event might activate an end-of-game controller when the play
 Media Assets
 ------------
 
-Objects in the world array may reference external, non-text media assets such as sounds and images. Many of the examples above include media URIs
+Objects in the world array may reference external, non-text media assets such as sounds and images. Many of the examples above include media URIs which fit this format::
+
+    [type]://[path/relative/to/world.json]
 
 .. _media-sounds:
 
 Sounds
 ~~~~~~
 
-TODO
+Audio file URIs have the type *sound* and include a path and filename without a filename extension. The audio view attaches an extension of ".ogg" or ".mp3" depending on which audio codec the player's browser supports. You should package both OGG Vorbis and MP3 versions of all of your audio files with your game to ensure cross browser compatibility.
+
+Some examples of valid audio URIs include::
+
+    sound://sound_effects/sizzling
+    sound://narration/cookSinging
+    sound://audio_files/music/track1
 
 Images
 ~~~~~~
 
-TODO
+Image file URIs have the type *image* and include a path and file with a filename extension. Numerous image formats are ubiquitously supported across browsers (e.g., PNG, JPEG, GIF), so there is no need to detect browser capabilities or ship images in multiple formats.
+
+Some examples of valid image URIs include::
+
+    image://backdrops/ocean.jpg
+    image://sprites/egg.png
 
 Stylesheets
 -----------
 
-TODO
+You can modify the basic styling of the boilerplate by adjusting CSS rules without touching the view JavaScript or HTML. Open the *webapp/css/main.css* file and make your edits in the section with the comment header *Author's custom styles*. You can easily change the font family, font size, foreground color, background color, and so on in here. For more advanced changes to the visuals in the boilerplate UI, see :doc:`engine`.
